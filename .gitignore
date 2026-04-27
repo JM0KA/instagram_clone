@@ -1,0 +1,25 @@
+# Flutter / Dart
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Android
+android/app/google-services.json
+android/key.properties
+android/app/*.keystore
+
+# iOS
+ios/Runner/GoogleService-Info.plist
+
+# Environment files
+.env
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
