@@ -1,20 +1,27 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:instagram_clone/resources/auth_methods.dart';
 import 'package:instagram_clone/utils/colours.dart';
+import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/text_field_input.dart';
+import 'package:image_picker/image_picker.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _SignUpScreen createState() => _SignUpScreen();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreen extends State<SignUpScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
+  Uint8List? _image;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -23,6 +30,36 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.dispose();
     _bioController.dispose();
     _usernameController.dispose();
+  }
+
+  void selectImage() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+
+    setState(() {
+      _image = im;
+    });
+  }
+
+  void signUpUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    String res = await AuthMethods().signUpUser(
+      email: _emailController.text,
+      password: _passwordController.text,
+      username: _usernameController.text,
+      bio: _bioController.text,
+      file: _image!,
+    );
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (res != 'success') {
+      showSnackBar(res, context);
+    }
   }
 
   @override
@@ -39,6 +76,32 @@ class _LoginScreenState extends State<LoginScreen> {
               // SVG image
               SvgPicture.asset('assets/instagram_logo.svg', color: primaryColor, height: 64),
               const SizedBox(height: 64),
+              // Circular widget to accept and show our selected file
+              Stack(
+                children: [
+                  _image != null
+                      ? CircleAvatar(radius: 64, backgroundImage: MemoryImage(_image!))
+                      : const CircleAvatar(
+                          radius: 64,
+                          backgroundImage: NetworkImage(
+                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiRo5RsazUIy3LPn-DG57NPTKgVyRcUqqJODFRmkEdbg&s=10',
+                          ),
+                        ),
+                  Positioned(
+                    bottom: -10,
+                    left: 80,
+                    child: IconButton(onPressed: selectImage, icon: const Icon(Icons.add_a_photo)),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              // text field for username
+              TextFieldInput(
+                textEditingController: _usernameController,
+                hintText: 'Enter your username',
+                textInputType: TextInputType.text,
+              ),
+              const SizedBox(height: 24),
               // Text field for email
               TextFieldInput(
                 textEditingController: _emailController,
@@ -52,6 +115,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 hintText: 'Enter your password',
                 textInputType: TextInputType.text,
                 isPass: true,
+              ),
+              const SizedBox(height: 24),
+              TextFieldInput(
+                textEditingController: _bioController,
+                hintText: 'Enter your bio',
+                textInputType: TextInputType.text,
               ),
               const SizedBox(height: 24),
               // Button login
@@ -74,9 +143,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Container(child: Text("Don't have an account?"), padding: const EdgeInsets.symmetric(vertical: 8)),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: signUpUser,
                     child: Container(
-                      child: Text("Sign Up", style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: _isLoading
+                          ? Center(child: CircularProgressIndicator(color: primaryColor))
+                          : Text("Sign Up", style: TextStyle(fontWeight: FontWeight.bold)),
                       padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
                   ),
