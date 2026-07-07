@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instagram_clone/resources/auth_methods.dart';
+import 'package:instagram_clone/screens/login_screen.dart';
 import 'package:instagram_clone/utils/colours.dart';
 import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/text_field_input.dart';
@@ -90,7 +91,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                   Positioned(
                     bottom: -10,
                     left: 80,
-                    child: IconButton(onPressed: selectImage, icon: const Icon(Icons.add_a_photo)),
+                    child: IconButton(onPressed: selectImage, icon: const Icon(Icons.add_a_photo), color: primaryColor),
                   ),
                 ],
               ),
@@ -125,8 +126,8 @@ class _SignUpScreen extends State<SignUpScreen> {
               const SizedBox(height: 24),
               // Button login
               InkWell(
+                onTap: signUpUser,
                 child: Container(
-                  child: const Text('Log in'),
                   width: double.infinity,
                   alignment: Alignment.center,
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -134,6 +135,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.all(Radius.circular(4))),
                     color: blueColor,
                   ),
+                  child: _isLoading ? const Center(child: CircularProgressIndicator(color: primaryColor)) : const Text('Sign up'),
                 ),
               ),
               const SizedBox(height: 12),
@@ -141,14 +143,12 @@ class _SignUpScreen extends State<SignUpScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(child: Text("Don't have an account?"), padding: const EdgeInsets.symmetric(vertical: 8)),
+                  Container(padding: const EdgeInsets.symmetric(vertical: 8), child: Text("Already have an account?")),
                   GestureDetector(
-                    onTap: signUpUser,
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoginScreen())),
                     child: Container(
-                      child: _isLoading
-                          ? Center(child: CircularProgressIndicator(color: primaryColor))
-                          : Text("Sign Up", style: TextStyle(fontWeight: FontWeight.bold)),
                       padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: const Text('Login', style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ],
