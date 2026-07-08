@@ -35,13 +35,30 @@ class AuthMethods {
           'bio': bio,
           'followers': [],
           'following': [],
-          'photoUrl': photoUrl
+          'photoUrl': photoUrl,
         });
 
         res = 'success';
       }
     } catch (err) {
-      
+      res = err.toString();
+    }
+    return res;
+  }
+
+  // Login User
+  Future<String> loginUser({required String email, required String password}) async {
+    String res = 'Some error occurred';
+
+    try {
+      if (email.isNotEmpty || password.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(email: email, password: password);
+
+        res = 'success';
+      } else {
+        res = 'Please enter all the fields';
+      }
+    } catch (err) {
       res = err.toString();
     }
     return res;
