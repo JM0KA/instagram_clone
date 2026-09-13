@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram_clone/resources/auth_methods.dart';
+import 'package:instagram_clone/screens/signup_screen.dart';
 import 'package:instagram_clone/utils/colours.dart';
 import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/text_field_input.dart';
@@ -32,7 +33,6 @@ class _LoginScreenState extends State<LoginScreen> {
     String res = await AuthMethods().loginUser(email: _emailController.text, password: _passwordController.text);
 
     if (res == 'success') {
-      //
     } else {
       // show snackBar
       showSnackBar(res, context);
@@ -40,6 +40,10 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _isLoading = false;
     });
+  }
+
+  void navigateToSignup() {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignUpScreen()));
   }
 
   @override
@@ -92,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Container(padding: const EdgeInsets.symmetric(vertical: 8), child: Text("Don't have an account?")),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: navigateToSignup,
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Text("Sign Up", style: TextStyle(fontWeight: FontWeight.bold)),

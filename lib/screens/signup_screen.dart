@@ -63,6 +63,10 @@ class _SignUpScreen extends State<SignUpScreen> {
     }
   }
 
+  void navigateToLogin() {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoginScreen()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,21 +99,21 @@ class _SignUpScreen extends State<SignUpScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
               // text field for username
               TextFieldInput(
                 textEditingController: _usernameController,
                 hintText: 'Enter your username',
                 textInputType: TextInputType.text,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
               // Text field for email
               TextFieldInput(
                 textEditingController: _emailController,
                 hintText: 'Enter your email',
                 textInputType: TextInputType.emailAddress,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
               // Text field input for password
               TextFieldInput(
                 textEditingController: _passwordController,
@@ -117,13 +121,13 @@ class _SignUpScreen extends State<SignUpScreen> {
                 textInputType: TextInputType.text,
                 isPass: true,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
               TextFieldInput(
                 textEditingController: _bioController,
                 hintText: 'Enter your bio',
                 textInputType: TextInputType.text,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
               // Button login
               InkWell(
                 onTap: signUpUser,
@@ -145,7 +149,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                 children: [
                   Container(padding: const EdgeInsets.symmetric(vertical: 8), child: Text("Already have an account?")),
                   GestureDetector(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoginScreen())),
+                    onTap: navigateToLogin,
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: const Text('Login', style: TextStyle(fontWeight: FontWeight.bold)),
